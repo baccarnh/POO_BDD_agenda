@@ -1,4 +1,4 @@
-class Event:
+class Event():
     """Class that caracterise an event using his title, date,hour and description :"""
 
     def __init__(self, dico):
@@ -21,6 +21,4 @@ class Event:
         date: {}\n \
         hour: {}\n \
         description: {}\n"
-
-
         print(text.format(self.title, self.date, self.hour, self.description))

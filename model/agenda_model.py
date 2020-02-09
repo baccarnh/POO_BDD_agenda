@@ -1,44 +1,55 @@
-from .connection import Connection
+from model.connection import *
+from model.event import *
 
-class AgendaModel:
+class AgendaModel():
     '''class to execute SQL statements'''
     def __init__(self):
         self.db = Connection()
-    # The class requires an instance of Connection to execute SQL statements
+         # The class requires an instance of Connection to execute SQL statements
 
-    def check_event(self):
+
+    def add_event(self, the_title, the_day, the_hour, the_description):
+        """method adding event and inform the user"""
+        self.db.initialize_connection()
+        self.db.cursor.execute("INSERT INTO events (title, date, hour, description) VALUES (%s,%s,%s,%s);",
+                               (the_title, the_day, the_hour, the_description))
+        self.db.connection.commit()
+        self.db.close_connection()
+
+    def check_event(self, the_day):
         '''method selecting all events in a given date'''
         self.db.initialize_connection()
-        self.db.cursor.execute("SELECT * FROM events WHERE date=%s ;", the_day,)
+        self.db.cursor.execute("SELECT * FROM events WHERE date=%s ;", (the_day,))
         stored_events = self.db.cursor.fetchall()
         self.db.close_connection()
         return stored_events
 
-    def cancel_event(self):
-        '''method selecting one event in given date and hour, delete it and inform the user '''
-        self.db.initialize_connection()
-        self.db.cursor.execute("SELECT * FROM events WHERE date=%s AND hour=%s;", the_day, the_hour )
-        the_event = self.db.cursor.fetchone()
-        self.db.cursor.execute("DELETE FROM events WHERE date=%s AND hour=%s;", the_day, the_hour)
-        self.db.connection.commit()
-        self.db.close_connection()
-        return "the event {} has been deleted".format(the_event)
-
-    def edit_event(self):
-        '''method selecting an event in given date and hour, edit it and inform the user '''
+    """def select_event(self, the_day, the_hour):
         self.db.initialize_connection()
         self.db.cursor.execute("SELECT * FROM events WHERE date=%s AND hour=%s;", the_day, the_hour)
-        event_to_update= self.db.cursor.fetchone()
-        self.db.cursor.execute("UPDATE events SET title=%s, description=%s WHERE date=%s AND hour=%s;",new_date, new_description,  the_day, the_hour)
-        updated_event=self.db.cursor.fetchone()
-        self.db.connection.commit()
+        the_event = self.db.cursor.fetchone()
         self.db.close_connection()
-        return "the event {} has been replaced by {}".format(event_to_update, updated_event)
+        return the_event"""
 
-    def add_event(self, event):
-        '''method adding event and inform the user '''
+    def cancel_event(self, the_day, the_hour ):
+        """method selecting one event in given date and hour, delete it and inform the user"""
         self.db.initialize_connection()
-        self.db.cursor.execute("INSERT INTO events (title, date, hour, description) VALUES (%s,%s,%s,%s);",
-                               (event.title, event.date, event.hour, event.description))
+        self.db.cursor.execute("SELECT * FROM events WHERE date=%s AND hour=%s;", (the_day, the_hour))
+        selected_event = self.db.cursor.fetchone()
+        self.db.cursor.execute("DELETE FROM events WHERE date=%s AND hour=%s;", (the_day, the_hour))
         self.db.connection.commit()
         self.db.close_connection()
+        return selected_event
+
+    def edit_event(self, the_day, the_hour, new_title, new_description):
+        """method selecting an event in given date and hour, edit it and inform the user"""
+        self.db.initialize_connection()
+        self.db.cursor.execute("SELECT * FROM events WHERE date=%s AND hour=%s;", (the_day, the_hour))
+        selected_event= self.db.cursor.fetchone()
+        self.db.cursor.execute("UPDATE events SET title=%s, description=%s WHERE date=%s AND hour=%s;",(new_title, new_description, the_day, the_hour))
+        self.db.connection.commit()
+        self.db.cursor.execute("SELECT * FROM events WHERE date=%s AND hour=%s;", (the_day, the_hour))
+        updated_event= self.db.cursor.fetchone()
+        self.db.close_connection()
+        return selected_event, updated_event
+
