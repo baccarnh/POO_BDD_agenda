@@ -1,4 +1,4 @@
-##Projet à rendre
+## Projet à rendre
 Développeur freelance, vous avez été contacté par Madame Derieux, médecin généraliste qui a
 besoin de vos services. Madame Derieux est très occupée entre son métier et ses nombreuses
 activités. Elle a souvent des difficultés à gérer son agenda et son emploi du temps. Comme tous les
@@ -16,7 +16,7 @@ Spécifications fonctionnelles :
 - Deux événements ne peuvent pas avoir lieu le même jour à la même heure
 - Un événement est composé obligatoirement d'un titre, d'une date, d'une heure et éventuellement d'une description
 
-#Spécifications techniques :
+# Spécifications techniques :
 - Langage Python 3
 - Organisation du code selon le principe MVC
 - Usage de la programmation orientée objet
